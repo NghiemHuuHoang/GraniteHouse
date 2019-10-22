@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using GraniteHouse.Utility
+@using GraniteHouse.Extensions
+@using Microsoft.AspNetCore.Http
+
+@inject IHttpContextAccessor HttpContextAccessor
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -8,38 +13,83 @@
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
+        <link rel="stylesheet" href="~/css/jquery.timepicker.css" />
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+
+        <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+
     </environment>
     <environment exclude="Development">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/jquery.timepicker.css" />
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+        
+
+        <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
     </environment>
 </head>
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">GraniteHouse</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-                </ul>
-                <partial name="_LoginPartial" />
-            </div>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark  fixed-top">
+        <a class="navbar-brand" asp-area="Customer" asp-action="Index" asp-controller="Home">Granite House</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item"><a class="nav-link" asp-area="Customer" asp-controller="Home" asp-action="Index">Home</a></li>
+
+
+                @if (User.IsInRole(SD.SuperAdminEndUser))
+                {
+                    <li class="nav-item"><a class="nav-link" asp-area="Admin" asp-controller="ProductTypes" asp-action="Index">Product Types</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-area="Admin" asp-controller="SpecialTag" asp-action="Index">Special Tag</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-area="Admin" asp-controller="Products" asp-action="Index">Products</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-area="Admin" asp-controller="AdminUser" asp-action="Index">Admin User</a></li>
+
+                }
+                @if (User.IsInRole(SD.AdminEndUser) || User.IsInRole(SD.SuperAdminEndUser))
+                {
+                    <li class="nav-item"><a class="nav-link" asp-area="Admin" asp-controller="Order" asp-action="Index">Order</a></li>
+                }
+                @if (HttpContextAccessor.HttpContext.Session.Get<List<int>>("ShoppingCart") != null)
+                {
+                    <li type="color:White">
+                        <a class="nav-link" asp-area="Customer" asp-controller="ShoppingCart" asp-action="Index">
+                            <i class="fas fa-shopping-cart" data-toggle="tooltip" title="shopping cart"></i> &nbsp;
+                            @{
+                                var countCart = HttpContextAccessor.HttpContext.Session.Get<List<int>>("ShoppingCart").Count;
+                            }
+                            (@countCart)
+                        </a>
+                    </li>
+
+                }
+                else
+                {
+                    <li type="color:White">
+                        <a class="nav-link" asp-area="Customer" asp-controller="ShoppingCart" asp-action="Index">
+                            <i class="fas fa-shopping-cart"></i> &nbsp;
+
+                            (0)
+                        </a>
+                    </li>
+                }
+
+            </ul>
+          
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-light my-2 my-sm-0" type="submit"><i class="fas fa-search" data-toggle="tooltip" title="Search"></i></button>
+            </form>
         </div>
+        
+        <div><partial name="_LoginPartial" /></div>
     </nav>
 
-    <partial name="_CookieConsentPartial" />
+    
+
+   
 
     <div class="container body-content">
         @RenderBody()
@@ -53,6 +103,9 @@
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" ></script>
+        <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript" ></script>
+        <script src="~/js/jquery.timepicker.js" ></script>
     </environment>
     <environment exclude="Development">
         <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
@@ -67,7 +120,12 @@
                 crossorigin="anonymous"
                 integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd">
         </script>
+
+
         <script src="~/js/site.min.js" asp-append-version="true"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" ></script>
+        <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript" ></script>
+        <script src="~/js/jquery.timepicker.js"></script>
     </environment>
 
     @RenderSection("Scripts", required: false)

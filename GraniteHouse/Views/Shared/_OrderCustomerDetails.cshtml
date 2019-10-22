@@ -1,0 +1,39 @@
+﻿@model GraniteHouse.Models.Order
+ 
+<h4 class="text-success">Order Details</h4>
+
+<div style="height:120px;background-color:aqua;" class="container border">
+    <div class="col-12">
+        <div class="row" style="padding-top:10px;">
+            <div class="col-2">
+                Full Name
+            </div>
+            <div class="col-3">
+                <input asp-for="@Model.CustomerName" readonly class="form-control" />
+            </div>
+            <div class="col-2">
+                Email
+            </div>
+            <div class="col-3">
+                <input asp-for="@Model.Customermail" readonly class="form-control" />
+            </div>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="row" style="padding-top:10px;">
+            <div class="col-2">
+                Phone
+            </div>
+            <div class="col-3">
+                <input asp-for="@Model.CustomerPhone" readonly class="form-control" />
+            </div>
+            <div class="col-2">
+                OrderDate
+            </div>
+            <div class="col-3">
+                <input asp-for="@Model.OrderDate" readonly class="form-control" />
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,154 @@
+﻿@model GraniteHouse.Models.ModelViews.DetailsOrderViewModel
+@using GraniteHouse.Extensions
+@using GraniteHouse.Utility
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<h2 class="text-info">Edit Order</h2>
+<form method="post" enctype="multipart/form-data">
+    <div class="p-4 border rounded row">
+        <input asp-for="Order.Id" hidden />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="col-6">
+            <div class="form-group row">
+                <div class="col-4 ">
+                    <label asp-for="Order.CustomerName"></label>
+
+                </div>
+                <div class="col-8">
+                    <input asp-for="Order.CustomerName" class="form-control" />
+                    <span asp-validation-for="Order.CustomerName" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-4 ">
+                    <label asp-for="Order.User"></label>
+
+                </div>
+                <div class="col-8">
+                    @if (User.IsInRole(SD.AdminEndUser))
+                    {
+                        <input asp-for="@Model.Order.User.Name" readonly class="form-control" />
+                        <input asp-for="@Model.Order.UserNameId" hidden />
+
+                    }
+                    else
+                    {
+                        <select asp-for="@Model.Order.UserNameId" asp-items="Model.Users.ToSelectListItemString(Model.Order.UserNameId)" class="form-control"></select>
+                    }
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4 ">
+                    <label asp-for="Order.Customermail"></label>
+
+                </div>
+                <div class="col-8">
+                    <input asp-for="Order.Customermail" class="form-control" />
+                    <span asp-validation-for="Order.Customermail" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4 ">
+                    <label asp-for="Order.CustomerPhone"></label>
+
+                </div>
+                <div class="col-8">
+                    <input asp-for="Order.CustomerPhone" class="form-control" />
+                    <span asp-validation-for="Order.CustomerPhone" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4 ">
+                    <label asp-for="Order.OrderDate"></label>
+
+                </div>
+                <div class="col-8">
+                    <input asp-for="Order.OrderDate" id="datepicker" class="form-control" />
+                    <span asp-validation-for="Order.OrderDate" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4 ">
+                    <label asp-for="Order.OrderTime"></label>
+
+                </div>
+                <div class="col-8">
+                    <input asp-for="Order.OrderTime" id="timepicker" type="text" class="timepicker form-control" />
+                    <span asp-validation-for="Order.OrderTime" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4 ">
+                    <label asp-for="Order.IsConfirmed"></label>
+
+                </div>
+                <div class="col-8">
+                    <input asp-for="Order.IsConfirmed" class="form-control" />
+                    <span asp-validation-for="Order.IsConfirmed" class="text-danger"></span>
+                </div>
+            </div>
+
+
+
+        </div>
+        <div class="col-6">
+            @* Partial View *@
+        </div>
+
+        <br />
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary" value="Update" />
+            <a class="btn btn-success" asp-action="Index">Back To List</a>
+        </div>
+    </div>
+</form>
+@section scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+
+
+        $('.timepicker').timepicker({
+            timeFormat: 'h:mm p',
+            interval: 60,
+            minTime: '10',
+            maxTime: '6:00pm',
+            startTime: '10:00',
+            dynamic: true,
+            dropdown: true,
+            scrollbar: true
+        });
+        $(function () {
+
+            $('#datepicker').datepicker({
+                minDate: +1, maxDate: "+3M"
+            });
+
+        });
+        $(document).ready(function () {
+            var orderTime = document.getElementById('datepicker').value;
+            var splitDate = "";
+            if (orderTime.indexOf("") > 0) {
+                splitDate = orderTime.split("");
+            } else {
+                splitDate = orderTime.split("T");
+            }
+            var time = splitDate[1].substring(0, 5);
+            if (time.slice(-1) == ":") {
+                time = time.substring(0, time.length - 1);
+
+            }
+            var amPmTime = splitDate[2];
+            $('#datepicker').attr('value', splitDate[0]);
+            $('#timepicker').attr('value', time + ' ' + amPmTime);
+        });
+    </script>
+}
+
+

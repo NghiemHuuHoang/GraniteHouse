@@ -1,0 +1,18 @@
+﻿@model GraniteHouse.Models.ModelViews.SSShoppingCartViewModel
+@{
+    ViewData["Title"] = "OrderConfirmation";
+}
+
+<br />
+<h2 class="text-info">Order Confirmation</h2>
+<div class="form-text">
+    your order has been submited.Please feel free to contact us anytime you have any questions 
+</div>
+<br />
+<partial name="~/Views/Shared/_OrderCustomerDetails.cshtml" model="Model.Order" />
+<br />
+<partial name="~/Views/Shared/_OrderProductDetails.cshtml" model="Model.Products" />
+<br />
+<div>
+    <a class="btn btn-success" asp-action="Index" asp-area="Customer" asp-controller="Home">Back To Home</a>
+</div>

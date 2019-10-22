@@ -1,0 +1,67 @@
+﻿@model IEnumerable<GraniteHouse.Models.AuthenticationUser>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<br /><br />
+<div class="row">
+    <div class="col-5">
+        <h2 class="text-danger navbar-brand ">Admin User List</h2>
+    </div>
+    <div class="col-5 text-md-right ">
+        <a class="btn btn-info" asp-area="Identity" asp-page="/Account/Register"><i class="fas fa-plus" data-toggle="tooltip" title="New"></i> New Admin User</a>
+    </div>
+</div>
+<br />
+
+<div>
+    <table class="table table-bordered">
+        <tr class="table-info">
+            <th width="250px;">
+                @Html.DisplayNameFor(m => m.Name)
+            </th>
+            <th width="250px;">
+                @Html.DisplayNameFor(m => m.Email)
+            </th>
+            <th width="250px;">
+                @Html.DisplayNameFor(m => m.PhoneNumber)
+            </th>
+            <th align="center">Disabled</th>
+            <th align="center">Action</th>
+        </tr>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(m => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(m => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(m => item.PhoneNumber)
+            </td>
+            <td>
+                @if (item.LockoutEnd != null && item.LockoutEnd > DateTime.Now)
+                {
+                    <label>Disabled</label>
+                }
+            </td>
+            <td>
+                @if (item.LockoutEnd == null || item.LockoutEnd < DateTime.Now)
+                {
+                    <a type="button" class="btn btn-primary " href="@Url.Action("Edit/"+item.Id)">
+                        <i class="fas fa-edit" data-toggle="tooltip" title="Edit"></i>
+                    </a>
+                    <a type="button" class="btn btn-danger" href="@Url.Action("Delete/"+item.Id)">
+                        <i class="far fa-trash-alt" data-toggle="tooltip" title="Delete"></i>
+                    </a>
+                }
+            </td>
+            
+        </tr>
+        }
+    </table>
+</div>

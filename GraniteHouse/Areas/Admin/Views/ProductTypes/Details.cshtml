@@ -1,0 +1,31 @@
+﻿
+@model GraniteHouse.Models.ProductTypes
+@{
+    ViewData["Title"] = "Details";
+}
+
+
+<h2 class="text-info"> Produt Type Details</h2>
+
+    <div class="p-4 border rounded">
+      
+        
+        <div class="form-group row">
+            <div class="col-2 ">
+                <label asp-for="Name"></label>
+
+            </div>
+            <div class="col-5">
+                <input asp-for="Name" class="form-control" disabled/>
+               
+            </div>
+        </div>
+        <br />
+        <div class="form-group">
+            <a asp-action="Edit"  class="btn btn-primary" asp-route-id="@Model.Id" >Edit</a>
+            <a class="btn btn-success" asp-action="Index">Back To List</a>
+        </div>
+    </div>
+
+
+

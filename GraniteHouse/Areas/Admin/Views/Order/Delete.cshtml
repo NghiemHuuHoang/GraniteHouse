@@ -1,0 +1,143 @@
+﻿@model GraniteHouse.Models.ModelViews.DetailsOrderViewModel
+@using GraniteHouse.Extensions
+@using GraniteHouse.Utility
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<h2 class="text-info">Delete Order</h2>
+<form method="post" >
+    <div class="p-4 border rounded row">
+        <input asp-for="Order.Id" hidden />
+
+        <div class="col-4">
+            <div class="form-group row">
+                <div class="col-4 ">
+                    <label asp-for="Order.CustomerName"></label>
+
+                </div>
+                <div class="col-8">
+                    <input asp-for="Order.CustomerName" readonly class="form-control" />
+
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-4 ">
+                    <label asp-for="Order.User"></label>
+
+                </div>
+                <div class="col-8">
+                    @if (User.IsInRole(SD.AdminEndUser))
+                    {
+                        <input asp-for="@Model.Order.User.Name" readonly class="form-control" />
+                        <input asp-for="@Model.Order.UserNameId" hidden />
+
+                    }
+                    else
+                    {
+                        <select asp-for="@Model.Order.UserNameId" asp-items="Model.Users.ToSelectListItemString(Model.Order.UserNameId)" class="form-control" disabled></select>
+                    }
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4 ">
+                    <label asp-for="Order.Customermail"></label>
+
+                </div>
+                <div class="col-8">
+                    <input asp-for="Order.Customermail" readonly class="form-control" />
+
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4 ">
+                    <label asp-for="Order.CustomerPhone"></label>
+
+                </div>
+                <div class="col-8">
+                    <input asp-for="Order.CustomerPhone" readonly class="form-control" />
+
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4 ">
+                    <label asp-for="Order.OrderDate"></label>
+
+                </div>
+                <div class="col-8">
+                    <input asp-for="Order.OrderDate" disabled class="form-control" id="datepickerr" />
+
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4 ">
+                    <label asp-for="Order.OrderTime"></label>
+
+                </div>
+                <div class="col-8">
+                    <input asp-for="Order.OrderTime" id="timepicker" disabled type="text" class="timepicker form-control" />
+
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-4 ">
+                    <label asp-for="Order.IsConfirmed"></label>
+
+                </div>
+                <div class="col-8">
+                    <input asp-for="Order.IsConfirmed" readonly class="form-control" />
+
+                </div>
+            </div>
+
+
+
+        </div>
+        <div class="col-8">
+            <partial name="_OrderProductDetails" model="Model.Products" />
+        </div>
+
+        <br />
+
+    </div>
+    <div class="row">
+        <div class="form-group">
+            <input  class="btn btn-danger" type="submit" value="Delete" asp-route-id="@Model.Order.Id"/>
+            <a class="btn btn-success" asp-action="Index">Back To List</a>
+        </div>
+    </div>
+</form>
+@section scripts{
+   
+    <script>
+
+
+        
+        $(document).ready(function () {
+            var orderTime = document.getElementById("datepickerr").value;
+            var splitData = "";
+            if (orderTime.indexOf(" ") > 0) {
+                splitData = orderTime.split(" ");
+            } else {
+                splitData = orderTime.split("T");
+            }
+
+
+            var time = splitData[1].substring(0, 5);
+            if (time.slice(-1) == ":") {
+                time = time.substring(0, time.length - 1);
+
+            }
+            var amPmTime = splitData[2];
+            $('#datepickerr').attr('value', splitData[0]);
+            $('#timepicker').attr('value', time + ' ' + amPmTime);
+        });
+    </script>
+}
+
+
