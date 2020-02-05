@@ -27,9 +27,9 @@ namespace GraniteHouse.Areas.Admin.Controllers
         }
         public async Task<IActionResult> Index(int productPage = 1, string searchName = null, string searchPhone = null, string searchDate = null, string searchEmail = null)
         {
-            //System.Security.Claims.ClaimsPrincipal currentUser = this.User;
-            //var claimsIdentity = (ClaimsIdentity)this.User.Identity;
-            //var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+            var claimsIdentity = (ClaimsIdentity)this.User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             OrderViewModel orderViewModel = new OrderViewModel()
             {
                 Orders = new List<Models.Order>()
@@ -62,10 +62,10 @@ namespace GraniteHouse.Areas.Admin.Controllers
             }
 
             orderViewModel.Orders = _db.Orders.Include(a => a.User).ToList();
-            //if (User.IsInRole(SD.AdminEndUser))
-            //{
-            //    orderViewModel.Orders = orderViewModel.Orders.Where(p => p.UserNameId == claim.Value).ToList();
-            //}
+            if (User.IsInRole(SD.AdminEndUser))
+            {
+                orderViewModel.Orders = orderViewModel.Orders.Where(p => p.UserNameId == claim.Value).ToList();
+            }
             if (searchName != null)
             {
                 orderViewModel.Orders = orderViewModel.Orders.Where(a => a.CustomerName.ToLower().Contains(searchName.ToLower())).ToList();

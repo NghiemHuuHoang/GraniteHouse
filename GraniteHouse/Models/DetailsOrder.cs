@@ -10,6 +10,8 @@ namespace GraniteHouse.Models
     {
         public int Id { get; set; }
 
+        public double Total { get; set; }
+
         public int OrderId { get; set; }
 
         [ForeignKey("OrderId")]

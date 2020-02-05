@@ -60,15 +60,35 @@ namespace GraniteHouse.Areas.Customer.Controllers
                 await _db.SaveChangesAsync();
 
                 int orderId = order.Id;
+               
 
                 foreach (int productId in listCartItem)
                 {
-                    DetailsOrder detailsOrder = new DetailsOrder()
+                    try
                     {
-                        OrderId = orderId,
-                        ProductId = productId
-                    };
-                    _db.DetailsOrders.Add(detailsOrder);
+                        
+                        
+                            
+
+
+                            //var total = SSShoppingCartVM.Products.Where(a=>a.Id==productId).Sum(c => c.Price);
+                            DetailsOrder detailsOrder = new DetailsOrder()
+                            {
+
+                                OrderId = orderId,
+                                ProductId = productId,
+                                //Total = SSShoppingCartVM.Products.Sum(a => a.Price)
+
+                            };
+                            _db.DetailsOrders.Add(detailsOrder);
+                        }
+                        
+                    
+                    catch (Exception ex)
+                    {
+
+                    }
+
                 }
                 await _db.SaveChangesAsync();
                 listCartItem = new List<int>();

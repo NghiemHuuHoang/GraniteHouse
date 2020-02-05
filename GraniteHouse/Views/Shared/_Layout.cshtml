@@ -38,7 +38,11 @@
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item"><a class="nav-link" asp-area="Customer" asp-controller="Home" asp-action="Index">Home</a></li>
+                @*@if (!User.IsInRole(SD.SuperAdminEndUser) || User == null)
+        {
+            <li class="nav-item"><a class="nav-link" asp-area="Customer" asp-controller="ViewProductTypes" asp-action="Index">Granite</a></li>
 
+        }*@
 
                 @if (User.IsInRole(SD.SuperAdminEndUser))
                 {
@@ -52,7 +56,19 @@
                 {
                     <li class="nav-item"><a class="nav-link" asp-area="Admin" asp-controller="Order" asp-action="Index">Order</a></li>
                 }
-                @if (HttpContextAccessor.HttpContext.Session.Get<List<int>>("ShoppingCart") != null)
+                @if (HttpContextAccessor.HttpContext.Session.Get<List<int>>("ShoppingCart") == null)
+                {
+                    <li type="color:White">
+                        <a class="nav-link" asp-area="Customer" asp-controller="ShoppingCart" asp-action="Index">
+                            <i class="fas fa-shopping-cart"></i> &nbsp;
+
+                            (0)
+                        </a>
+                    </li>
+
+
+                }
+                else
                 {
                     <li type="color:White">
                         <a class="nav-link" asp-area="Customer" asp-controller="ShoppingCart" asp-action="Index">
@@ -63,23 +79,12 @@
                             (@countCart)
                         </a>
                     </li>
-
-                }
-                else
-                {
-                    <li type="color:White">
-                        <a class="nav-link" asp-area="Customer" asp-controller="ShoppingCart" asp-action="Index">
-                            <i class="fas fa-shopping-cart"></i> &nbsp;
-
-                            (0)
-                        </a>
-                    </li>
                 }
 
             </ul>
           
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <form class="form-inline my-2 my-lg-0" method="get">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" name="searchName" aria-label="Search">
                 <button class="btn btn-outline-light my-2 my-sm-0" type="submit"><i class="fas fa-search" data-toggle="tooltip" title="Search"></i></button>
             </form>
         </div>

@@ -20,11 +20,18 @@ namespace GraniteHouse.Controllers
         {
             _db = db;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchName = null)
         {
+            if (searchName != null)
+            {
+              var productList = _db.Products.Where(a => a.Name.ToLower().Contains(searchName.ToLower())).ToList();
+                return View(productList);
+            }
             var prodcutList = await _db.Products.Include(m => m.ProductTypes).Include(m => m.SpecialTag).ToListAsync();
             return View(prodcutList);
         }
+
+       
 
         public async Task<IActionResult> Details(int id)
         {
